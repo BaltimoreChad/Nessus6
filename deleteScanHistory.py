@@ -101,7 +101,7 @@ def get_history_ids(SID):
                 if data['history'] is not None:
                     if (d['last_modification_date']) < unix_timestamp:
                         print(f"/scans/{s}/history/{d['history_id']} is older than {unix_timestamp} and will be "
-                              f"deleted.") 
+                              f"deleted.")
                         deleteHistory(s, d['history_id'])
                         count += 1
         else:
@@ -120,13 +120,16 @@ def deleteHistory(sid, hid):
 
 if __name__ == '__main__':
     print('Logging in...')
-    token = login(username, password)
+    try:
+        token = login(username, password)
 
-    print("Retrieving scans...")
-    scans = get_scans()
-    deletedScans = get_history_ids(scans)
+        print("Retrieving scans...")
+        scans = get_scans()
+        deletedScans = get_history_ids(scans)
 
-    if deletedScans == 1:
-        print(f"{deletedScans} scan was deleted.")
-    else:
-        print(f"{deletedScans} scans were deleted.")
+        if deletedScans == 1:
+            print(f"{deletedScans} scan was deleted.")
+        else:
+            print(f"{deletedScans} scans were deleted.")
+    except requests.exceptions.MissingSchema as e:
+        print({e})
